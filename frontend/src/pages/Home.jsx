@@ -4,15 +4,24 @@ import Weather from "../components/Weather";
 
 export default function Home() {
   const [searchedCity, setSearchedCity] = useState("");
+  const [searchWeatherData, setSearchWeatherData] = useState(null);
 
   const handleSearch = (city) => {
     setSearchedCity(city);
   };
-
+  // console.log(searchWeatherData);
   return (
     <>
-      <UserForm handleSearch={handleSearch} />
-      {searchedCity && <Weather city={searchedCity} />}
+      <UserForm
+        handleSearch={handleSearch}
+        searchWeatherData={searchWeatherData}
+      />
+      {searchedCity && (
+        <Weather
+          city={searchedCity}
+          handleSearchWeatherData={setSearchWeatherData}
+        />
+      )}
     </>
   );
 }
