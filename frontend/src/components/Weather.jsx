@@ -5,6 +5,7 @@ import weatherApi from "../services/weatherApi";
 function Weather({ city }) {
   const [userLanguage, setUserLanguage] = useState("en");
   const [forecastWeatherData, setForecastWeatherData] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [searchWeatherData, setSearchWeatherData] = useState(null);
 
   useEffect(() => {
