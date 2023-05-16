@@ -29,11 +29,12 @@ function UserForm({ handleSearch }) {
       );
       setCitySuggestions(sortedSuggestions);
     }
+    handleSubmit();
   };
 
-  const handleCityClick = (cityName) => {
+  const handleCityClick = async (cityName) => {
     setCity(cityName);
-    handleSearch(cityName);
+    await handleSearch(cityName);
   };
 
   // Affiche la liste déroulante avec les suggestions de villes

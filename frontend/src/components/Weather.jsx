@@ -5,7 +5,8 @@ import weatherApi from "../services/weatherApi";
 function Weather({ city }) {
   const [userLanguage, setUserLanguage] = useState("en");
   const [forecastWeatherData, setForecastWeatherData] = useState(null);
-  const [setSearchWeatherData] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [searchWeatherData, setSearchWeatherData] = useState(null);
 
   useEffect(() => {
     setUserLanguage(navigator.language.substring(0, 2)); // extrait la langue avant le tiret (-)
