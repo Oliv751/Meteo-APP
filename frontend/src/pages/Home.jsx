@@ -14,7 +14,9 @@ export default function Home() {
 
   return (
     <div className="container">
-      <UnsplashBody />
+      <div className="background">
+        <UnsplashBody />
+      </div>
       <div className="content">
         <UserForm
           handleSearch={handleSearch}
