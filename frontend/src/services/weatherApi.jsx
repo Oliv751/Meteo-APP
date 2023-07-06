@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { createApi } from "unsplash-js";
@@ -52,11 +52,23 @@ const unsplashApi = createApi({
   accessKey: import.meta.env.VITE_UNSPLASH_API_KEY,
 });
 
-function PhotoComp({ photo }) {
+function PhotoComp({ photo, onClick }) {
   const { user, urls } = photo;
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      onClick();
+    }
+  };
+
   return (
-    <>
+    <div
+      className="photo"
+      onClick={onClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+    >
       <img className="img" alt="wallpaperImg" src={urls.regular} />
       <a
         className="credit"
@@ -66,12 +78,14 @@ function PhotoComp({ photo }) {
       >
         {user.name}
       </a>
-    </>
+    </div>
   );
 }
 
 export function UnsplashBody() {
   const [data, setPhotosResponse] = useState(null);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const backgroundRef = useRef(null); // Référence pour l'élément de fond
 
   useEffect(() => {
     unsplashApi.search
@@ -84,6 +98,22 @@ export function UnsplashBody() {
       });
   }, []);
 
+  useEffect(() => {
+    if (data && data.response.results.length > 0) {
+      setSelectedPhoto(data.response.results[0]);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (backgroundRef.current && selectedPhoto) {
+      backgroundRef.current.style.backgroundImage = `url(${selectedPhoto.urls.regular})`;
+    }
+  }, [selectedPhoto]);
+
+  const handlePhotoClick = (photo) => {
+    setSelectedPhoto(photo);
+  };
+
   if (data === null) {
     return <div>Loading...</div>;
   }
@@ -95,12 +125,13 @@ export function UnsplashBody() {
       </div>
     );
   }
+
   return (
-    <div className="feed">
+    <div className="feed" ref={backgroundRef}>
       <ul className="columnUl">
         {data.response.results.map((photo) => (
           <li key={photo.id} className="li">
-            <PhotoComp photo={photo} />
+            <PhotoComp photo={photo} onClick={() => handlePhotoClick(photo)} />
           </li>
         ))}
       </ul>
@@ -118,6 +149,7 @@ PhotoComp.propTypes = {
       regular: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default {
